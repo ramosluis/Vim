@@ -2,8 +2,9 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
-set rtp+=%HOME%/vimfiles/bundle/Vundle.vim/
-call vundle#begin('%USERPROFILE%/vimfiles/bundle/')
+set rtp+=$HOME/vimfiles/bundle/Vundle.vim/
+let path='$HOME/vimfiles/bundle'
+call vundle#begin(path)
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
 
@@ -24,29 +25,12 @@ Plugin 'Raimondi/delimitMate'
 " Plugin 'Valloric/YouCompleteMe'
 Plugin 'rakr/vim-one'
 Plugin 'davidhalter/jedi-vim'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'Lokaltog/powerline'
-Plugin 'rosenfeld/conque-term' 
+" Plugin 'vim-airline/vim-airline'
+" Plugin 'vim-airline/vim-airline-themes'
+" Plugin 'Lokaltog/powerline'
+" Plugin 'rosenfeld/conque-term' 
 Plugin 'majutsushi/tagbar'
-Plugin 'ervandew/supertab'
-
-" plugin from http://vim-scripts.org/vim/scripts.html
-" Plugin 'L9'
-
-" Git plugin not hosted on GitHub
-" Plugin 'git://git.wincent.com/command-t.git'
-
-" git repos on your local machine (i.e. when working on your own plugin)
-" Plugin 'file:///home/gmarik/path/to/plugin'
-
-" The sparkup vim script is in a subdirectory of this repo called vim.
-" Pass the path to set the runtimepath properly.
-" Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-
-" Install L9 and avoid a Naming conflict if you've already installed a
-" different version somewhere else.
-" Plugin 'ascenator/L9', {'name': 'newL9'}
+" Plugin 'ervandew/supertab'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -124,7 +108,7 @@ set bs=2     " make backspace behave like normal again
 " Rebind <Leader> key
 " I like to have it here becuase it is easier to reach than the default and
 " it is next to ``m`` and ``n`` which I use for navigating between tabs.
-"" let mapleader = ","
+let mapleader = ","
 
 " Showing line numbers and length
 set number  " show line numbers
@@ -153,7 +137,7 @@ let g:syntastic_check_on_wq = 0
 " Press F2 for NERDTreeToggle
 map <F2> :NERDTreeToggle<CR>
 
-map <F5> :ConqueTermSplit powershell.exe<CR>
+" map <F5> :ConqueTermSplit powershell.exe<CR>
 
 " Rainbow parentheses colors
 let g:rbpt_colorpairs = [
@@ -213,9 +197,9 @@ set guifont=Liberation_Mono_for_Powerline:h10
 "" AirLine settings
 "=====================================================
 " let g:airline_theme='badwolf'
-let g:airline#extensions#tabline#enabled=1
-let g:airline#extensions#tabline#formatter='unique_tail'
-let g:airline_powerline_fonts=1
+" let g:airline#extensions#tabline#enabled=1
+" let g:airline#extensions#tabline#formatter='unique_tail'
+" let g:airline_powerline_fonts=1
 
 "=====================================================
 "" TagBar settings
