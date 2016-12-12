@@ -1,8 +1,12 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
+"=====================================================
+"" Vundle settings
+"=====================================================
+
 " set the runtime path to include Vundle and initialize
-set rtp+=$HOME/vimfiles/bundle/Vundle.vim/
+set rtp+=$HOME/vimfiles/bundle/Vundle.vim/                          " $HOME is usually C:/Users/luis
 let path='$HOME/vimfiles/bundle'
 call vundle#begin(path)
 " alternatively, pass a path where Vundle should install plugins
@@ -11,99 +15,50 @@ call vundle#begin(path)
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-" The following are examples of different formats supported.
-" Keep Plugin commands between vundle#begin/end.
-" plugin on GitHub repo
-Plugin 'tmhedberg/SimpylFold'
-Plugin 'vim-scripts/indentpython.vim'
-Plugin 'scrooloose/syntastic'
-Plugin 'nvie/vim-flake8'
-Plugin 'scrooloose/nerdtree'
-Plugin 'fholgado/minibufexpl.vim'
-Plugin 'kien/rainbow_parentheses.vim'
-Plugin 'Raimondi/delimitMate'
-" Plugin 'Valloric/YouCompleteMe'
-Plugin 'rakr/vim-one'
-Plugin 'davidhalter/jedi-vim'
-" Plugin 'vim-airline/vim-airline'
-" Plugin 'vim-airline/vim-airline-themes'
-" Plugin 'Lokaltog/powerline'
-" Plugin 'rosenfeld/conque-term' 
-Plugin 'majutsushi/tagbar'
-" Plugin 'ervandew/supertab'
+"-------------------=== Code/Project navigation ===-------------
+Plugin 'majutsushi/tagbar'                " Class/module browser
+Plugin 'scrooloose/nerdtree'              " Project and file navigation
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
-" Note that for key combinations 'C' = Ctrl key
+"-------------------=== Other ===-------------------------------
+Plugin 'kien/rainbow_parentheses.vim'     " Color support for nested brackets
+Plugin 'Raimondi/delimitMate'             " Auto pair brackets
+Plugin 'rakr/vim-one'                     " Color scheme
+Plugin 'fholgado/minibufexpl.vim'         " Buffer explorer/viewer
 
-" For Python3
-set encoding=utf-8
+"-------------------=== Languages support ===-------------------
+Plugin 'Shougo/neocomplete.vim'           " Autocomplete
+Plugin 'tmhedberg/SimpylFold'             " Code folding
+Plugin 'scrooloose/syntastic'             " Syntax checking plugin
+
+"-------------------=== Python  ===-----------------------------
+Plugin 'nvie/vim-flake8'                  " Python linter
+Plugin 'vim-scripts/indentpython.vim'     " Python indentations conforming to PEP8
+Plugin 'davidhalter/jedi-vim'             " Python vim autocomplete plugin
+
+"-------------------=== C/C++  ===-----------------------------
 
 
-"split navigations
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
+call vundle#end()                         " required
+filetype plugin on
+filetype plugin indent on
+
+"=====================================================
+"" General settings
+"=====================================================
+
+set encoding=utf-8                        " Standard encoding
 
 " Enable folding
 set foldmethod=indent
 set foldlevel=99
 
-" Proper PEP8 indentation for python
-au BufNewFile,BufRead *.py
-    \ set tabstop=4 |
-    \ set softtabstop=4 |
-    \ set shiftwidth=4 |
-    \ set textwidth=79 |
-    \ set expandtab |
-    \ set autoindent |
-    \ set fileformat=unix
-
-" Indentation for other file types
-au BufNewFile,BufRead *.js, *.html, *.css, *.c, *.ino
-    \ set tabstop=2 |
-    \ set softtabstop=2 |
-    \ set shiftwidth=2
-
-" Flag unnecessary whitespace
-" au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
-
-let python_highlight_all=1
+set t_Co=256                              " Set 256 colors
+colorscheme one                           " Set color scheme
 syntax on
 
-"ignore files in NERDTree
-let NERDTreeIgnore=['\.pyc$', '\~$'] 
+set clipboard=unnamed                     " Access system clipboard
 
-autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
-au InsertLeave * match ExtraWhitespace /\s\+$/
-
-" Colors!
-set t_Co=256                                " set 256 colors
-if has('gui_running')
-  set background=dark
-  colorscheme one
-else
-  colorscheme zenburn
-endif
-
-" Access system clipboard
-set clipboard=unnamed
-
-set bs=2     " make backspace behave like normal again
-
+set bs=2                                  " Make backspace behave like normal again
 
 " Rebind <Leader> key
 " I like to have it here becuase it is easier to reach than the default and
@@ -111,11 +66,11 @@ set bs=2     " make backspace behave like normal again
 let mapleader = ","
 
 " Showing line numbers and length
-set number  " show line numbers
-"" set tw=79   " width of document (used by gd)
-"" set nowrap  " don't automatically wrap on load
-"" set fo-=t   " don't automatically wrap text when typing
-set colorcolumn=80
+set number                               " Show line numbers
+"" set tw=79                             " Width of document (used by gd)
+"" set nowrap                            " Don't automatically wrap on load
+"" set fo-=t                             " Don't automatically wrap text when typing
+set colorcolumn=80                       " Color column 80 a different color
 highlight ColorColumn ctermbg=233
 
 " Disable stupid backup and swap files - they trigger too many events
@@ -124,7 +79,23 @@ set nobackup
 set nowritebackup
 set noswapfile
 
-" Syntastic defaults
+set backspace=indent,eol,start           " Backspace removes all (indents, EOLs, start) What is start?
+
+autocmd GUIEnter * simalt ~x            " Start GVim maximized
+
+
+"=====================================================
+"" NERDTree settings
+"=====================================================
+autocmd VimEnter * NERDTree             " Start NERDTree automatically
+let NERDTreeIgnore=['\.pyc$', '\~$']    "ignore files in NERDTree
+map <F2> :NERDTreeToggle<CR>            " Press F2 for NERDTreeToggle
+autocmd VimEnter * NERDTree             " Start NERDTree Automatically
+
+
+"=====================================================
+"" Syntastic settings
+"=====================================================
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -134,12 +105,11 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
-" Press F2 for NERDTreeToggle
-map <F2> :NERDTreeToggle<CR>
+let g:syntastic_python_checkers = ['flake8']   " Because PyLint is annoying
 
-" map <F5> :ConqueTermSplit powershell.exe<CR>
-
-" Rainbow parentheses colors
+"=====================================================
+"" Rainbow pareentheses settings
+"=====================================================
 let g:rbpt_colorpairs = [
     \ ['brown',       'RoyalBlue3'],
     \ ['Darkblue',    'SeaGreen3'],
@@ -165,41 +135,11 @@ au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
 
-" For folding code
-autocmd BufWinEnter *.py setlocal foldexpr=SimpylFold(v:lnum) foldmethod=expr
-autocmd BufWinLeave *.py setlocal foldexpr< foldmethod<
-
-" Start gVim maximized
-autocmd GUIEnter * simalt ~x
-
-" Search and replace word under cursor using F4
-nnoremap <F4> :%s/<c-r><c-w>/<c-r><c-w>/gc<c-f>$F/i
-
-" Toggle light/dark backgrounds with F5
-" call togglebg#map("<F5>")
-
-
-" Start ConqueTerm with powershell Automatically
-" autocmd VimEnter * ConqueTermSplit powershell.exe
-
-" Start NERDTree Automatically
-autocmd VimEnter * NERDTree
-
-" So that delimitmate auto indents inside brackets
-let delimitMate_expand_cr = 1
+"=====================================================
+"" delimitMate settings
+"=====================================================
+let delimitMate_expand_cr = 1           " Auto indent inside brackets
 let delimitMate_expand_space = 1
-
-
-set backspace=indent,eol,start              " backspace removes all (indents, EOLs, start) What is start?
-
-set guifont=Liberation_Mono_for_Powerline:h10 
-"=====================================================
-"" AirLine settings
-"=====================================================
-" let g:airline_theme='badwolf'
-" let g:airline#extensions#tabline#enabled=1
-" let g:airline#extensions#tabline#formatter='unique_tail'
-" let g:airline_powerline_fonts=1
 
 "=====================================================
 "" TagBar settings
@@ -209,13 +149,69 @@ let g:tagbar_width=42
 autocmd BufEnter *.py :call tagbar#autoopen(0)
 autocmd BufWinLeave *.py :TagbarClose
 
-" jedi-vim
-let g:jedi#popup_select_first=0             " Disable choose first option on autocomplete
-let g:jedi#show_call_signatures=0           " Show call signatures
-let g:jedi#popup_on_dot=0                   " Enable autocomplete on dot
 
-" python executables for different plugins
-let g:pymode_python='python'
+"=====================================================
+"" Jedi-Vim settings
+"=====================================================
+let g:jedi#popup_select_first=0         " Disable choose first option on autocomplete
+let g:jedi#show_call_signatures=0       " Show call signatures
+let g:jedi#popup_on_dot=0               " Enable autocomplete on dot
+
+
+"=====================================================
+"" Neocomplete settings
+"=====================================================
+let g:neocomplete#enable_at_startup = 1 " Use neocomplete.
+let g:neocomplete#enable_smart_case = 1 " Use smartcase.
+let g:neocomplete#sources#syntax#min_keyword_length = 3   " Set minimum syntax keyword length.
+
+
+"=====================================================
+"" Python settings
+"=====================================================
+let g:pymode_python='python'            " python executables for different plugins
 let g:jedi#force_py_version=3
 
-let g:syntastic_python_checkers = ['flake8']
+" Proper PEP8 indentation for python
+au BufNewFile,BufRead *.py
+    \ set tabstop=4 |
+    \ set softtabstop=4 |
+    \ set shiftwidth=4 |
+    \ set textwidth=79 |
+    \ set expandtab |
+    \ set autoindent |
+    \ set fileformat=unix
+
+" Indentation for other file types
+au BufNewFile,BufRead *.js, *.html, *.css, *.c, *.ino
+    \ set tabstop=2 |
+    \ set softtabstop=2 |
+    \ set shiftwidth=2
+
+let python_highlight_all=1
+
+"=====================================================
+"" Custom keybindings
+"=====================================================
+"split navigations
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" Rebind <Leader> key
+" I like to have it here becuase it is easier to reach than the default and
+" it is next to ``m`` and ``n`` which I use for navigating between tabs.
+let mapleader = ","
+
+nnoremap <F4> :%s/<c-r><c-w>/<c-r><c-w>/gc<c-f>$F/i   " Search and replace word under cursor using F4
+
+
+"=====================================================
+"" Autocommands
+"=====================================================
+autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red    " Highlight unnecessary whitespace
+au InsertLeave * match ExtraWhitespace /\s\+$/
+
+" Toggle light/dark backgrounds with F5
+" call togglebg#map("<F5>")
