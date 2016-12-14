@@ -24,16 +24,19 @@ Plugin 'kien/rainbow_parentheses.vim'     " Color support for nested brackets
 Plugin 'Raimondi/delimitMate'             " Auto pair brackets
 Plugin 'rakr/vim-one'                     " Color scheme
 Plugin 'fholgado/minibufexpl.vim'         " Buffer explorer/viewer
+Plugin 'ervandew/supertab'                " Tab completion
+Plugin 'Lokaltog/vim-powerline'           " Fancy fartsy status line
 
 "-------------------=== Languages support ===-------------------
-Plugin 'Shougo/neocomplete.vim'           " Autocomplete
 Plugin 'tmhedberg/SimpylFold'             " Code folding
 Plugin 'scrooloose/syntastic'             " Syntax checking plugin
+Plugin 'scrooloose/nerdcommenter'         " Bulk Commenting
+Plugin 'SirVer/ultisnips'                 " Snippet tool
+Plugin 'honza/vim-snippets'               " The actual snippets
 
 "-------------------=== Python  ===-----------------------------
 Plugin 'nvie/vim-flake8'                  " Python linter
 Plugin 'vim-scripts/indentpython.vim'     " Python indentations conforming to PEP8
-Plugin 'davidhalter/jedi-vim'             " Python vim autocomplete plugin
 
 "-------------------=== C/C++  ===-----------------------------
 
@@ -51,6 +54,10 @@ set encoding=utf-8                        " Standard encoding
 " Enable folding
 set foldmethod=indent
 set foldlevel=99
+
+" These two MUST be inserted BEFORE the colorscheme command
+" autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red    " Highlight unnecessary whitespace
+" au InsertLeave * match ExtraWhitespace /\s\+$/
 
 set t_Co=256                              " Set 256 colors
 colorscheme one                           " Set color scheme
@@ -79,9 +86,18 @@ set nobackup
 set nowritebackup
 set noswapfile
 
-set backspace=indent,eol,start           " Backspace removes all (indents, EOLs, start) What is start?
+set wildmenu                            " visual autocomplete for command menu
+
+set backspace=indent,eol,start          " Backspace removes all (indents, EOLs, start) What is start?
 
 autocmd GUIEnter * simalt ~x            " Start GVim maximized
+
+
+"=====================================================
+"" Tabs / Buffers settings
+"=====================================================
+set switchbuf=useopen
+set laststatus=2
 
 
 "=====================================================
@@ -91,6 +107,16 @@ autocmd VimEnter * NERDTree             " Start NERDTree automatically
 let NERDTreeIgnore=['\.pyc$', '\~$']    "ignore files in NERDTree
 map <F2> :NERDTreeToggle<CR>            " Press F2 for NERDTreeToggle
 autocmd VimEnter * NERDTree             " Start NERDTree Automatically
+
+
+"=====================================================
+"" NERDCommenter settings
+"=====================================================
+let g:NERDSpaceDelims = 1               " Add spaces after comment delimiters by default
+let g:NERDCompactSexyComs = 1           " Use compact syntax for prettified multi-line comments
+let g:NERDDefaultAlign = 'left'         " Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDCommentEmptyLines = 1         " Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDTrimTrailingWhitespace = 1    " Enable trimming of trailing whitespace when uncommenting
 
 
 "=====================================================
@@ -146,24 +172,9 @@ let delimitMate_expand_space = 1
 "=====================================================
 let g:tagbar_autofocus=0
 let g:tagbar_width=42
+let g:tagbar_show_linenumbers = -1
 autocmd BufEnter *.py :call tagbar#autoopen(0)
 autocmd BufWinLeave *.py :TagbarClose
-
-
-"=====================================================
-"" Jedi-Vim settings
-"=====================================================
-let g:jedi#popup_select_first=0         " Disable choose first option on autocomplete
-let g:jedi#show_call_signatures=0       " Show call signatures
-let g:jedi#popup_on_dot=0               " Enable autocomplete on dot
-
-
-"=====================================================
-"" Neocomplete settings
-"=====================================================
-let g:neocomplete#enable_at_startup = 1 " Use neocomplete.
-let g:neocomplete#enable_smart_case = 1 " Use smartcase.
-let g:neocomplete#sources#syntax#min_keyword_length = 3   " Set minimum syntax keyword length.
 
 
 "=====================================================
@@ -190,6 +201,21 @@ au BufNewFile,BufRead *.js, *.html, *.css, *.c, *.ino
 
 let python_highlight_all=1
 
+
+"=====================================================
+"" Supertab settings
+"=====================================================
+let g:SuperTabDefaultCompletionType = "<c-n>"
+
+
+"=====================================================
+"" UltiSnips settings
+"=====================================================
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+
 "=====================================================
 "" Custom keybindings
 "=====================================================
@@ -204,14 +230,14 @@ nnoremap <C-H> <C-W><C-H>
 " it is next to ``m`` and ``n`` which I use for navigating between tabs.
 let mapleader = ","
 
-nnoremap <F4> :%s/<c-r><c-w>/<c-r><c-w>/gc<c-f>$F/i   " Search and replace word under cursor using F4
+" Search and replace word under cursor using F4
+nnoremap <F4> :%s/<c-r><c-w>/<c-r><c-w>/gc<c-f>$F/i
 
+nmap <F9> :bprev<CR>                    " Previous buffer
+nmap <F10> :bnext<CR>                   " Next buffer
 
 "=====================================================
 "" Autocommands
 "=====================================================
-autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red    " Highlight unnecessary whitespace
-au InsertLeave * match ExtraWhitespace /\s\+$/
-
 " Toggle light/dark backgrounds with F5
 " call togglebg#map("<F5>")
