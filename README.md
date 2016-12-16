@@ -2,7 +2,7 @@
 
 In order to use all the plugins in this _vimrc file, it's necesarry to download/install the following in Windows:
 
-* [Vim with Python 3 and Lua support.](https://bintray.com/veegee/generic/vim_x64/view)
+* [Vim with Python 3 and Lua support.](https://tuxproject.de/projects/vim/)
 * [Python 3](https://www.python.org/downloads/) ([Or Anaconda](https://www.continuum.io/downloads))
 * [Vundle](https://github.com/VundleVim/Vundle.vim)
 * [Lua binaries](http://luabinaries.sourceforge.net/#installation)
