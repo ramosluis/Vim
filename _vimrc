@@ -9,8 +9,6 @@ filetype off                  " required
 set rtp+=$HOME/vimfiles/bundle/Vundle.vim/                          " $HOME is usually C:/Users/luis
 let path='$HOME/vimfiles/bundle'
 call vundle#begin(path)
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
@@ -24,8 +22,8 @@ Plugin 'kien/rainbow_parentheses.vim'     " Color support for nested brackets
 Plugin 'Raimondi/delimitMate'             " Auto pair brackets
 Plugin 'rakr/vim-one'                     " Color scheme
 Plugin 'fholgado/minibufexpl.vim'         " Buffer explorer/viewer
-Plugin 'ervandew/supertab'                " Tab completion
-Plugin 'Lokaltog/vim-powerline'           " Fancy fartsy status line
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 
 "-------------------=== Languages support ===-------------------
 Plugin 'tmhedberg/SimpylFold'             " Code folding
@@ -33,12 +31,12 @@ Plugin 'scrooloose/syntastic'             " Syntax checking plugin
 Plugin 'scrooloose/nerdcommenter'         " Bulk Commenting
 Plugin 'SirVer/ultisnips'                 " Snippet tool
 Plugin 'honza/vim-snippets'               " The actual snippets
+Plugin 'Shougo/neocomplete.vim'           " Code omnicompletion
 
 "-------------------=== Python  ===-----------------------------
 Plugin 'nvie/vim-flake8'                  " Python linter
 Plugin 'vim-scripts/indentpython.vim'     " Python indentations conforming to PEP8
-
-"-------------------=== C/C++  ===-----------------------------
+Plugin 'davidhalter/jedi-vim'             " Python auto complete library
 
 
 call vundle#end()                         " required
@@ -92,6 +90,50 @@ set backspace=indent,eol,start          " Backspace removes all (indents, EOLs, 
 
 autocmd GUIEnter * simalt ~x            " Start GVim maximized
 
+:cd $HOME                               " Set default working directory
+
+
+"=====================================================
+"" Neocomplete settings
+"=====================================================
+let g:acp_enableAtStartup = 0           " Disable AutoComplPop
+let g:neocomplete#enable_at_startup = 1 " Use neocomplete
+let g:neocomplete#enable_smart_case = 1 " Use smartcase
+let g:neocomplete#sources#syntax#min_keyword_length = 3  " Set minimum syntax keyword length
+
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+  " For no inserting <CR> key.
+  "return pumvisible() ? "\<C-y>" : "\<CR>"
+endfunction
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+
+" Enable omni completion.
+" autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+" autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+" autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+" autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+" autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+" Enable heavy omni completion.
+if !exists('g:neocomplete#force_omni_input_patterns')
+  let g:neocomplete#force_omni_input_patterns = {}
+endif
+
+autocmd FileType python setlocal omnifunc=jedi#completions
+	let g:jedi#completions_enabled = 0
+	let g:jedi#auto_vim_configuration = 0
+	let g:neocomplete#force_omni_input_patterns.python =
+	\ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+	" alternative pattern: '\h\w*\|[^. \t]\.\w*'
+
 
 "=====================================================
 "" Tabs / Buffers settings
@@ -104,7 +146,7 @@ set laststatus=2
 "" NERDTree settings
 "=====================================================
 autocmd VimEnter * NERDTree             " Start NERDTree automatically
-let NERDTreeIgnore=['\.pyc$', '\~$']    "ignore files in NERDTree
+let NERDTreeIgnore=['\.blf$', '\.regtrans-ms$', '\.pyc$', '\~$']    "ignore files in NERDTree
 map <F2> :NERDTreeToggle<CR>            " Press F2 for NERDTreeToggle
 autocmd VimEnter * NERDTree             " Start NERDTree Automatically
 
