@@ -22,8 +22,9 @@ Plugin 'kien/rainbow_parentheses.vim'     " Color support for nested brackets
 Plugin 'Raimondi/delimitMate'             " Auto pair brackets
 Plugin 'rakr/vim-one'                     " Color scheme
 Plugin 'fholgado/minibufexpl.vim'         " Buffer explorer/viewer
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
+Plugin 'vim-airline/vim-airline'          " Status/tabline
+Plugin 'vim-airline/vim-airline-themes'   " Ditto
+Plugin 'ervandew/supertab'                " Enables tab completion when in insert mode
 
 "-------------------=== Languages support ===-------------------
 Plugin 'tmhedberg/SimpylFold'             " Code folding
@@ -53,9 +54,6 @@ set encoding=utf-8                        " Standard encoding
 set foldmethod=indent
 set foldlevel=99
 
-" These two MUST be inserted BEFORE the colorscheme command
-" autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red    " Highlight unnecessary whitespace
-" au InsertLeave * match ExtraWhitespace /\s\+$/
 
 set t_Co=256                              " Set 256 colors
 colorscheme one                           " Set color scheme
@@ -65,16 +63,8 @@ set clipboard=unnamed                     " Access system clipboard
 
 set bs=2                                  " Make backspace behave like normal again
 
-" Rebind <Leader> key
-" I like to have it here becuase it is easier to reach than the default and
-" it is next to ``m`` and ``n`` which I use for navigating between tabs.
-let mapleader = ","
-
 " Showing line numbers and length
 set number                               " Show line numbers
-"" set tw=79                             " Width of document (used by gd)
-"" set nowrap                            " Don't automatically wrap on load
-"" set fo-=t                             " Don't automatically wrap text when typing
 set colorcolumn=80                       " Color column 80 a different color
 highlight ColorColumn ctermbg=233
 
@@ -115,13 +105,6 @@ inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
 inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 
-" Enable omni completion.
-" autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-" autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-" autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-" autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-" autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-
 " Enable heavy omni completion.
 if !exists('g:neocomplete#force_omni_input_patterns')
   let g:neocomplete#force_omni_input_patterns = {}
@@ -132,7 +115,6 @@ autocmd FileType python setlocal omnifunc=jedi#completions
 	let g:jedi#auto_vim_configuration = 0
 	let g:neocomplete#force_omni_input_patterns.python =
 	\ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
-	" alternative pattern: '\h\w*\|[^. \t]\.\w*'
 
 
 "=====================================================
