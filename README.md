@@ -26,3 +26,5 @@ For OmniCompletion, Neocomplete is used along with jedi-vim for Python and OmniC
 * Place the `.ycm_extra_conf.py` file in the `%USERPROFILE%` directory
 
 Note that for ANSI C and Python Omnicompletion, Neocomplete has the same functionality as YCM, with much less setup and better Python integration, YCM should really only be used if doing C++ development.
+
+Finally, this file assumes that the font M+ 1mn is installed on the machine using it, it can be downloaded from [here](http://mplus-fonts.osdn.jp/about-en.html#font_files).
