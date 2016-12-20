@@ -25,6 +25,11 @@ Plugin 'fholgado/minibufexpl.vim'         " Buffer explorer/viewer
 Plugin 'vim-airline/vim-airline'          " Status/tabline
 Plugin 'vim-airline/vim-airline-themes'   " Ditto
 Plugin 'ervandew/supertab'                " Enables tab completion when in insert mode
+Plugin 'nathanaelkane/vim-indent-guides'  " Visually displays indent levels
+Plugin 'Yggdroot/indentLine'              " Displays spaces and tabs visually
+Plugin 'flazz/vim-colorschemes'           " Colorschemes
+Plugin 'dracula/vim'                      " GOAT colorscheme
+Plugin 'ctrlpvim/ctrlp.vim'                " Fuzzy file, buffer, mru, tag, etc, finder
 
 "-------------------=== Languages support ===-------------------
 Plugin 'tmhedberg/SimpylFold'             " Code folding
@@ -33,11 +38,15 @@ Plugin 'scrooloose/nerdcommenter'         " Bulk Commenting
 Plugin 'SirVer/ultisnips'                 " Snippet tool
 Plugin 'honza/vim-snippets'               " The actual snippets
 Plugin 'Shougo/neocomplete.vim'           " Code omnicompletion
+" Plugin 'Valloric/YouCompleteMe'          " Alternative omnicompletion, harder to install, bigger e-peen tho
 
 "-------------------=== Python  ===-----------------------------
-Plugin 'nvie/vim-flake8'                  " Python linter
+Plugin 'nvie/vim-flake8'                  " Python linter, because PyLint is whiny
 Plugin 'vim-scripts/indentpython.vim'     " Python indentations conforming to PEP8
 Plugin 'davidhalter/jedi-vim'             " Python auto complete library
+
+"--------------------=== C/C++ ===------------------------------
+Plugin 'okws/OmniCppComplete'             " C/C++ Omnicompletion
 
 
 call vundle#end()                         " required
@@ -56,7 +65,7 @@ set foldlevel=99
 
 
 set t_Co=256                              " Set 256 colors
-colorscheme one                           " Set color scheme
+colorscheme dracula                           " Set color scheme
 syntax on
 
 set clipboard=unnamed                     " Access system clipboard
@@ -80,7 +89,21 @@ set backspace=indent,eol,start          " Backspace removes all (indents, EOLs, 
 
 autocmd GUIEnter * simalt ~x            " Start GVim maximized
 
+imap <C-Return> <CR><CR><C-o>k<Tab>
+
 :cd $HOME                               " Set default working directory
+
+set guifont=M+\ 1mn:h10       " Set default font and font size
+
+
+
+"=====================================================
+"" YouCompleteMe settings
+"=====================================================
+let g:ycm_global_ycm_extra_conf = '$HOME/vimfiles/.ycm_extra_conf.py'
+let g:ycm_server_use_vim_stdout = 1
+let g:ycm_server_log_level = 'debug'
+let g:ycm_confirm_extra_conf  = 0
 
 
 "=====================================================
@@ -111,10 +134,10 @@ if !exists('g:neocomplete#force_omni_input_patterns')
 endif
 
 autocmd FileType python setlocal omnifunc=jedi#completions
-	let g:jedi#completions_enabled = 0
-	let g:jedi#auto_vim_configuration = 0
-	let g:neocomplete#force_omni_input_patterns.python =
-	\ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+    let g:jedi#completions_enabled = 0
+    let g:jedi#auto_vim_configuration = 0
+    let g:neocomplete#force_omni_input_patterns.python =
+    \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 
 
 "=====================================================
@@ -125,12 +148,28 @@ set laststatus=2
 
 
 "=====================================================
+"" Ctrl-P settings
+"=====================================================
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
+
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
+
+
+"=====================================================
 "" NERDTree settings
 "=====================================================
 autocmd VimEnter * NERDTree             " Start NERDTree automatically
 let NERDTreeIgnore=['\.blf$', '\.regtrans-ms$', '\.pyc$', '\~$']    "ignore files in NERDTree
 map <F2> :NERDTreeToggle<CR>            " Press F2 for NERDTreeToggle
 autocmd VimEnter * NERDTree             " Start NERDTree Automatically
+autocmd VimEnter * wincmd p
 
 
 "=====================================================
@@ -233,11 +272,33 @@ let g:SuperTabDefaultCompletionType = "<c-n>"
 
 
 "=====================================================
+"" Indent Guides settings
+"=====================================================
+let g:indent_guides_enable_on_vim_startup=1
+
+
+"=====================================================
+"" Indent Line settings
+"=====================================================
+let g:indentLine_setColors = 0          " Highlight conceal color with colorscheme
+let g:indentLine_enabled = 1            " Enable by default
+
+
+"=====================================================
 "" UltiSnips settings
 "=====================================================
-let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsExpandTrigger="<F5>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+
+"=====================================================
+"" SimpylFold settings
+"=====================================================
+let g:SimpylFold_docstring_preview = 1
+let g:SimpylFold_fold_import = 0
+autocmd BufWinEnter *.py setlocal foldexpr=SimpylFold(v:lnum) foldmethod=expr
+autocmd BufWinLeave *.py setlocal foldexpr< foldmethod<
 
 
 "=====================================================
@@ -260,8 +321,5 @@ nnoremap <F4> :%s/<c-r><c-w>/<c-r><c-w>/gc<c-f>$F/i
 nmap <F9> :bprev<CR>                    " Previous buffer
 nmap <F10> :bnext<CR>                   " Next buffer
 
-"=====================================================
-"" Autocommands
-"=====================================================
-" Toggle light/dark backgrounds with F5
-" call togglebg#map("<F5>")
+" Enable folding with the spacebar
+nnoremap <space> za
