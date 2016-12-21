@@ -1,4 +1,4 @@
-set nocompatible              " be iMproved, required
+ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 "=====================================================
@@ -26,6 +26,7 @@ Plugin 'vim-airline/vim-airline'          " Status/tabline
 Plugin 'vim-airline/vim-airline-themes'   " Ditto
 Plugin 'ervandew/supertab'                " Enables tab completion when in insert mode
 Plugin 'flazz/vim-colorschemes'
+Plugin 'nathanaelkane/vim-indent-guides'
 
 "-------------------=== Languages support ===-------------------
 Plugin 'tmhedberg/SimpylFold'             " Code folding
@@ -34,6 +35,7 @@ Plugin 'scrooloose/nerdcommenter'         " Bulk Commenting
 Plugin 'SirVer/ultisnips'                 " Snippet tool
 Plugin 'honza/vim-snippets'               " The actual snippets
 Plugin 'Shougo/neocomplete.vim'           " Code omnicompletion
+" Plugin 'Valloric/YouCompleteMe'
 
 "-------------------=== Python  ===-----------------------------
 Plugin 'nvie/vim-flake8'                  " Python linter
@@ -111,6 +113,15 @@ autocmd FileType python setlocal omnifunc=jedi#completions
 	let g:jedi#auto_vim_configuration = 0
 	let g:neocomplete#force_omni_input_patterns.python =
 	\ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+
+
+"=====================================================
+"" YouCompleteMe settings
+"=====================================================
+" let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'  
+" let g:ycm_path_to_python_interpreter = '/usr/bin/python'
+" let g:ycm_server_keep_logfiles = 1
+" let g:ycm_server_log_level = 'debug'
 
 
 "=====================================================
@@ -231,7 +242,7 @@ let g:SuperTabDefaultCompletionType = "<c-n>"
 "=====================================================
 "" UltiSnips settings
 "=====================================================
-let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsExpandTrigger="<F4>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
@@ -251,13 +262,8 @@ nnoremap <C-H> <C-W><C-H>
 let mapleader = ","
 
 " Search and replace word under cursor using F4
-nnoremap <F4> :%s/<c-r><c-w>/<c-r><c-w>/gc<c-f>$F/i
+nnoremap <F1> :%s/<c-r><c-w>/<c-r><c-w>/gc<c-f>$F/i
 
 nmap <F9> :bprev<CR>                    " Previous buffer
 nmap <F10> :bnext<CR>                   " Next buffer
-
-"=====================================================
-"" Autocommands
-"=====================================================
-" Toggle light/dark backgrounds with F5
-" call togglebg#map("<F5>")
+nmap <F5> :!python %<CR>
