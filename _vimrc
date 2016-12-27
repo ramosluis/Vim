@@ -16,20 +16,21 @@ Plugin 'VundleVim/Vundle.vim'
 "-------------------=== Code/Project navigation ===-------------
 Plugin 'majutsushi/tagbar'                " Class/module browser
 Plugin 'scrooloose/nerdtree'              " Project and file navigation
+Plugin 'ctrlpvim/ctrlp.vim'               " Fuzzy file, buffer, mru, tag, etc, finder
+Plugin 'vim-airline/vim-airline'          " Status/tabline
+Plugin 'vim-airline/vim-airline-themes'   " Ditto
+Plugin 'fholgado/minibufexpl.vim'         " Buffer explorer/viewer
 
 "-------------------=== Other ===-------------------------------
 Plugin 'kien/rainbow_parentheses.vim'     " Color support for nested brackets
 Plugin 'Raimondi/delimitMate'             " Auto pair brackets
 Plugin 'rakr/vim-one'                     " Color scheme
-Plugin 'fholgado/minibufexpl.vim'         " Buffer explorer/viewer
-Plugin 'vim-airline/vim-airline'          " Status/tabline
-Plugin 'vim-airline/vim-airline-themes'   " Ditto
 Plugin 'ervandew/supertab'                " Enables tab completion when in insert mode
 Plugin 'nathanaelkane/vim-indent-guides'  " Visually displays indent levels
 Plugin 'Yggdroot/indentLine'              " Displays spaces and tabs visually
 Plugin 'flazz/vim-colorschemes'           " Colorschemes
 Plugin 'dracula/vim'                      " GOAT colorscheme
-Plugin 'ctrlpvim/ctrlp.vim'                " Fuzzy file, buffer, mru, tag, etc, finder
+Plugin 'myusuf3/numbers.vim'              " Shows relative and absolute line numbers when editing
 
 "-------------------=== Languages support ===-------------------
 Plugin 'tmhedberg/SimpylFold'             " Code folding
@@ -89,30 +90,27 @@ set backspace=indent,eol,start          " Backspace removes all (indents, EOLs, 
 
 autocmd GUIEnter * simalt ~x            " Start GVim maximized
 
-imap <C-Return> <CR><CR><C-o>k<Tab>
-
 :cd $HOME                               " Set default working directory
 
 set guifont=M+\ 1mn:h10       " Set default font and font size
 
 
-
 "=====================================================
 "" YouCompleteMe settings
 "=====================================================
-let g:ycm_global_ycm_extra_conf = '$HOME/vimfiles/.ycm_extra_conf.py'
-let g:ycm_server_use_vim_stdout = 1
-let g:ycm_server_log_level = 'debug'
-let g:ycm_confirm_extra_conf  = 0
+" let g:ycm_global_ycm_extra_conf = '$HOME/.ycm_extra_conf.py'
+" let g:ycm_server_use_vim_stdout = 1
+" let g:ycm_server_log_level = 'debug'
+" let g:ycm_confirm_extra_conf  = 0
 
 
 "=====================================================
 "" Neocomplete settings
 "=====================================================
-let g:acp_enableAtStartup = 0           " Disable AutoComplPop
+let g:acp_enableAtStartup = 1           " Disable AutoComplPop
 let g:neocomplete#enable_at_startup = 1 " Use neocomplete
 let g:neocomplete#enable_smart_case = 1 " Use smartcase
-let g:neocomplete#sources#syntax#min_keyword_length = 3  " Set minimum syntax keyword length
+let g:neocomplete#sources#syntax#min_keyword_length = 3  " Set minimum syntax keyword length"
 
 " Recommended key-mappings.
 " <CR>: close popup and save indent.
@@ -120,19 +118,18 @@ inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 function! s:my_cr_function()
   return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
   " For no inserting <CR> key.
-  "return pumvisible() ? "\<C-y>" : "\<CR>"
+  " return pumvisible() ? "\<C-y>" : "\<CR>"
 endfunction
 " <TAB>: completion.
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 " <C-h>, <BS>: close popup and delete backword char.
 inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>""
 
 " Enable heavy omni completion.
 if !exists('g:neocomplete#force_omni_input_patterns')
   let g:neocomplete#force_omni_input_patterns = {}
-endif
-
+endif"
 autocmd FileType python setlocal omnifunc=jedi#completions
     let g:jedi#completions_enabled = 0
     let g:jedi#auto_vim_configuration = 0
@@ -141,10 +138,22 @@ autocmd FileType python setlocal omnifunc=jedi#completions
 
 
 "=====================================================
+"" YouCompleteMe settings
+"=====================================================
+let g:numbers_exclude = ['unite', 'tagbar', 'startify', 'gundo', 'vimshell', 'w3m', 'nerdtree', 'minibufexpl']
+
+
+"=====================================================
 "" Tabs / Buffers settings
 "=====================================================
 set switchbuf=useopen
 set laststatus=2
+
+
+"=====================================================
+"" Flake-8 settings
+"=====================================================
+let no_flake8_maps = 1
 
 
 "=====================================================
@@ -169,7 +178,8 @@ autocmd VimEnter * NERDTree             " Start NERDTree automatically
 let NERDTreeIgnore=['\.blf$', '\.regtrans-ms$', '\.pyc$', '\~$']    "ignore files in NERDTree
 map <F2> :NERDTreeToggle<CR>            " Press F2 for NERDTreeToggle
 autocmd VimEnter * NERDTree             " Start NERDTree Automatically
-autocmd VimEnter * wincmd p
+autocmd VimEnter * silent NERDTree      " Supress warning at startup
+autocmd VimEnter * wincmd p             " Move cursor to editing window
 
 
 "=====================================================
@@ -287,16 +297,16 @@ let g:indentLine_enabled = 1            " Enable by default
 "=====================================================
 "" UltiSnips settings
 "=====================================================
-let g:UltiSnipsExpandTrigger="<F5>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsExpandTrigger="<F4>"
+let g:UltiSnipsJumpForwardTrigger="<c-f>"
+let g:UltiSnipsJumpBackwardTrigger="<c-a>"
 
 
 "=====================================================
 "" SimpylFold settings
 "=====================================================
 let g:SimpylFold_docstring_preview = 1
-let g:SimpylFold_fold_import = 0
+let g:SimpylFold_fold_import = 1
 autocmd BufWinEnter *.py setlocal foldexpr=SimpylFold(v:lnum) foldmethod=expr
 autocmd BufWinLeave *.py setlocal foldexpr< foldmethod<
 
@@ -315,11 +325,22 @@ nnoremap <C-H> <C-W><C-H>
 " it is next to ``m`` and ``n`` which I use for navigating between tabs.
 let mapleader = ","
 
-" Search and replace word under cursor using F4
-nnoremap <F4> :%s/<c-r><c-w>/<c-r><c-w>/gc<c-f>$F/i
+" Search and replace word under cursor using spacebar
+nnoremap <space> :%s/<c-r><c-w>/<c-r><c-w>/gc<c-f>$F/i
 
-nmap <F9> :bprev<CR>                    " Previous buffer
-nmap <F10> :bnext<CR>                   " Next buffer
+" Previous buffer
+nmap <F9> :bprev<CR>
+" Next buffer
+nmap <F10> :bnext<CR>
 
 " Enable folding with the spacebar
-nnoremap <space> za
+nnoremap <F6> za
+
+nnoremap <F5> :w<CR>:!python %<CR>
+
+" Ctrl-CR expands curly braces and auto-indents
+imap <C-Return> <CR><CR><C-o>k<Tab>
+
+" nnoremap <F7> :NumbersToggle<CR>
+" nnoremap <F8> :NumbersOnOff<CR>
+nnoremap <F8> :NumbersToggle<CR>
