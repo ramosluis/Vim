@@ -266,4 +266,3 @@ nnoremap <F1> :%s/<c-r><c-w>/<c-r><c-w>/gc<c-f>$F/i
 
 nmap <F9> :bprev<CR>                    " Previous buffer
 nmap <F10> :bnext<CR>                   " Next buffer
-nmap <F5> :!python %<CR>
